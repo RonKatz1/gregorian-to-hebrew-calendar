@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+
+        div {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        #date {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        #myBtn {
+        }
+    </style>
+    <script>
+
+        $(document).ready(function () {
+            createMainDiv();
+        });
+        function createMainDiv() {
+            let $date = $('<input/>', {
+                name: name, type: 'date', id: 'date'
+            }).change(function () {
+                let dt = new Date($("#date").val());
+                if (dt.getUTCDate()) {
+                    // alert("day " + dt.getUTCDate() + " month " + dt.getUTCMonth() + " year " + dt.getUTCFullYear());
+                    convertDate(dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate());
+                }
+                else
+                    alert('please pick a date');
+            });
+            let $mainDiv = $("<div>").attr("id", "mainDiv");
+            const $message = $("<h1>").text("בבקשה הכנס תאריך לועזי למערכת, לסיום לחץ על כפתור המרה");
+
+           // const $btn = $('<button>המרה</button>').attr("id", "myBtn").addClass("w3-btn w3-ripple w3-teal").click();
+
+            let $label = $("<label>").text("תאריך לועזי");
+
+            $mainDiv.append($message);
+          //  $mainDiv.append($btn);
+            $mainDiv.append($date);
+            $mainDiv.append($label);
+
+
+
+            $("body").append($mainDiv);
+        }
+        async function convertDate(year, month, day) {
+            let $resultMsg = $("<p>");
+            try {
+                const response = await fetch(`https://www.hebcal.com/converter?cfg=json&gy=${year}&gm=${month}&gd=${day}&g2h=1`);
+                const data = await response.json();
+                $("#resultDiv").remove();
+                let $resultDiv = $("<div>").attr("id", "resultDiv");
+                $resultMsg.text(data.hebrew);
+                $resultDiv.append($resultMsg);
+                $("body").append($resultDiv);
+            } catch (e) {
+                alert("something went wrong");
+            }
+        }
+
+
+    </script>
+    <title></title>
+</head>
+<body>
+</body>
+</html>
