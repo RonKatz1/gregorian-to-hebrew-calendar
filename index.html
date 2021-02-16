@@ -6,18 +6,38 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <style>
-
         div {
             text-align: center;
             margin-top: 100px;
         }
-
         #date {
             margin-left: 20px;
             margin-right: 20px;
         }
+        #resultMsg {
+            background-image: repeating-linear-gradient(45deg, violet, indigo, blue, green, yellow, orange, red, violet);
+            text-align: center;
+            background-size: 800% 800%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 8s ease infinite;
+            font-size:100px;
+        }
+        #message {
+            color: teal;
+        }
+        @keyframes rainbow {
+            0% {
+                background-position: 0% 50%
+            }
 
-        #myBtn {
+            50% {
+                background-position: 100% 25%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
         }
     </style>
     <script>
@@ -30,22 +50,17 @@
                 name: name, type: 'date', id: 'date'
             }).change(function () {
                 let dt = new Date($("#date").val());
-                if (dt.getUTCDate()) {
-                    // alert("day " + dt.getUTCDate() + " month " + dt.getUTCMonth() + " year " + dt.getUTCFullYear());
+                if (dt.getUTCDate()) 
                     convertDate(dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate());
-                }
+
                 else
-                    alert('please pick a date');
+                    $("#resultDiv").remove();
+
             });
             let $mainDiv = $("<div>").attr("id", "mainDiv");
-            const $message = $("<h1>").text("בבקשה הכנס תאריך לועזי למערכת, לסיום לחץ על כפתור המרה");
-
-           // const $btn = $('<button>המרה</button>').attr("id", "myBtn").addClass("w3-btn w3-ripple w3-teal").click();
-
+            const $message = $("<h1>").text("בבקשה הכנס תאריך לועזי למערכת").attr("id", "message");
             let $label = $("<label>").text("תאריך לועזי");
-
             $mainDiv.append($message);
-          //  $mainDiv.append($btn);
             $mainDiv.append($date);
             $mainDiv.append($label);
 
@@ -54,7 +69,7 @@
             $("body").append($mainDiv);
         }
         async function convertDate(year, month, day) {
-            let $resultMsg = $("<p>");
+            let $resultMsg = $("<p>").attr("id", "resultMsg");
             try {
                 const response = await fetch(`https://www.hebcal.com/converter?cfg=json&gy=${year}&gm=${month}&gd=${day}&g2h=1`);
                 const data = await response.json();
